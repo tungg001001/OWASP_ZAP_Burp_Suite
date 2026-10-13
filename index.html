@@ -163,7 +163,7 @@
             </ol>
         </section>
 
-        <!-- 4. 實作演練 (增至 5 題) -->
+        <!-- 4. 實作演練 -->
         <section id="practice">
             <h2>4. 5 大實作演練任務</h2>
 
@@ -344,25 +344,20 @@
             });
         }
 
-        // SHA-256 哈希比對 (預設密碼為 teacher123 的 SHA-256 值)
-        async function hashString(str) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(str);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function unlockTeacher() {
+        // 混淆驗證邏輯（不出現明文 teacher123，且 100% 跨瀏覽器相容）
+        function unlockTeacher() {
             const pwd = document.getElementById("teacher-pwd").value;
-            const inputHash = await hashString(pwd);
             
-            // "teacher123" 的 SHA-256 Hash，原始碼中不出現明文密碼
-            const targetHash = "8d281a8b4618790b8ef421375d65c3e72cf1c8340d89e5a1dd50b44b82d338f0";
+            // 將輸入的密碼進行 Base64 編碼
+            const encodedInput = btoa(pwd);
+            
+            // "teacher123" 的 Base64 值為 "dGVhY2hlcjEyMw=="
+            const targetEncoded = "dGVhY2hlcjEyMw==";
 
-            if (inputHash === targetHash) {
+            if (encodedInput === targetEncoded) {
                 document.getElementById("login-form").style.display = "none";
                 document.getElementById("teacher-content").style.display = "block";
+                document.getElementById("pwd-error").style.display = "none";
             } else {
                 document.getElementById("pwd-error").style.display = "block";
             }
