@@ -63,7 +63,7 @@
         .teacher-box { border: 2px dashed #2563eb; background: #f0f9ff; padding: 28px; border-radius: 8px; margin-top: 20px; }
         .input-group { margin: 18px 0; display: flex; gap: 10px; }
         .input-group input { padding: 10px 14px; border: 1px solid var(--border-color); border-radius: 6px; width: 280px; font-size: 1rem; }
-        .answer-card { background: #fff; border-left: 4px solid var(--primary-color); padding: 16px; margin-bottom: 16px; border-radius: 0 6px 6px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .answer-card { background: #fff; border-left: 4px solid var(--primary-color); padding: 16px; margin-bottom: 16px; border-radius: 0 6px 6px 0; shadow: 0 1px 2px rgba(0,0,0,0.05); }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
@@ -114,7 +114,7 @@
                     <tr>
                         <td><strong>Codespaces 雲端相容性</strong></td>
                         <td><span style="color:green; font-weight:bold;">極佳 (支援免密碼 Daemon 模式)</span></td>
-                        <td><span style="color:green; font-weight:bold;">極佳 (支援 KasmVNC 網頁雲端桌面)</span></td>
+                        <td><span style="color:green; font-weight:bold;">極佳 (支援極輕量 Web VNC 桌面)</span></td>
                     </tr>
                     <tr>
                         <td><strong>自動化掃描能力</strong></td>
@@ -144,27 +144,27 @@
         <section id="codespaces-setup">
             <h2>3. Codespaces 雲端實作建置指南</h2>
             <div class="alert-box success">
-                <strong>🚀 免安裝！使用 GitHub Codespaces 執行雲端靶場與網頁版 Burp Suite：</strong><br />
+                <strong>🚀 免安裝！使用 GitHub Codespaces 執行雲端靶場與極輕量 GUI 桌面：</strong><br />
                 完全無須在個人電腦安裝 Docker、Burp Suite 或任何軟體，直接在瀏覽器視窗中啟動完整實作環境！
             </div>
             
             <h3>快速啟動 3 步驟：</h3>
             <ol>
                 <li>在本 GitHub 專案頁面點擊 <code>&lt;&gt; Code</code> ➔ 切換至 <code>Codespaces</code> ➔ 點擊 <code>Create codespace on main</code>。</li>
-                <li>開啟雲端 VS Code 後，在下方 <strong>Terminal (終端機)</strong> 輸入以下 command 一鍵啟動 Juice Shop、ZAP API 與 <strong>KasmVNC 網頁桌面版 Burp Suite</strong>：
-                    <pre><code>docker run -d -p 3000:3000 --name juiceshop bkimminich/juice-shop && docker run -d -p 8080:8080 --name zap -e ZAP_AUTH_HEADER_VALUE="" zaproxy/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=".*" -config api.addrs.addr.regex=true -config api.disablekey=true && docker run -d -p 6080:6080 --name burp -e VNC_PASSWORD=admin kasmweb/burpsuite:1.14.0</code></pre>
+                <li>開啟雲端 VS Code 後，在下方 <strong>Terminal (終端機)</strong> 輸入以下 command 一鍵啟動 Juice Shop、ZAP API 與 <strong>極輕量 Web VNC 雲端桌面</strong>：
+                    <pre><code>docker run -d -p 3000:3000 --name juiceshop bkimminich/juice-shop && docker run -d -p 8080:8080 --name zap -e ZAP_AUTH_HEADER_VALUE="" zaproxy/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=".*" -config api.addrs.addr.regex=true -config api.disablekey=true && docker run -d -p 6080:80 --name burp dorowu/ubuntu-desktop-lxde-vnc</code></pre>
                 </li>
                 <li>切換至 VS Code 下方的 <strong>Ports</strong> 頁籤：
                     <ul>
                         <li><strong>Port 3000</strong>：右鍵選取 <code>Open in Browser</code> 開啟 <strong>Juice Shop 靶場網頁</strong>。</li>
                         <li><strong>Port 8080</strong>：右鍵選取 <code>Open in Browser</code> 開啟 <strong>OWASP ZAP 免登入 API 主頁</strong>。</li>
-                        <li><strong>Port 6080</strong>：右鍵選取 <code>Open in Browser</code> 開啟 <strong>Burp Suite 雲端 VNC 桌面</strong> (登入密碼為：<code>admin</code>)。</li>
+                        <li><strong>Port 6080</strong>：將 <code>Visibility</code> 設定為 <strong>Public</strong> 後右鍵開啟網頁，即可進入 <strong>極輕量 GUI 雲端桌面</strong>。</li>
                     </ul>
                 </li>
             </ol>
         </section>
 
-        <!-- 4. 實作演練 (增至 6 題) -->
+        <!-- 4. 實作演練 -->
         <section id="practice">
             <h2>4. 6 大實作演練任務</h2>
 
@@ -211,14 +211,14 @@
                 <li>觀察 Terminal 中 ZAP 爬蟲與檢測進度，並於完成後檢視 PASS (通過)、WARN (警告) 與 FAIL (弱點) 的完整資安評估報告！</li>
             </ol>
 
-            <h3>演練六：使用 Burp Suite (VNC 雲端桌面) 進行 HTTP 封包攔截與 Repeater 重放</h3>
+            <h3>演練六：使用雲端桌面 (VNC) 進行 HTTP 封包攔截與 Repeater 重放</h3>
             <ol>
-                <li>開啟 <strong>Port 6080</strong> 網頁，連線至雲端 Linux 桌面（若需要密碼輸入 <code>admin</code>）。</li>
-                <li>點擊開啟桌面上的 <strong>Burp Suite Community Edition</strong>。</li>
-                <li>使用 Burp 內建的預設瀏覽器 (Burp Browser) 開啟 Juice Shop 靶場網址 (`http://localhost:3000`)。</li>
+                <li>開啟 <strong>Port 6080</strong> 網頁（若跳出權限警示請將 Port 改為 Public），即可順利載入雲端 Linux 桌面。</li>
+                <li>點擊左下角 Application 選單，開啟桌面上的瀏覽器或 Burp Suite。</li>
+                <li>使用瀏覽器連線至 Juice Shop 靶場網址 (`http://localhost:3000`)。</li>
                 <li>切換至 Burp 的 <strong>Proxy ➔ Intercept</strong> 頁籤，點擊確認顯示 <code>Intercept is on</code>。</li>
-                <li>在 Juice Shop 網頁上嘗試輸入登入資訊，觀察 Burp Suite 成功攔截到的 POST 請求。</li>
-                <li>在攔截到的封包上點擊右鍵選擇 <strong>`Send to Repeater`</strong>（或按快捷鍵 <code>Ctrl + R</code>）。</li>
+                <li>在網頁上嘗試輸入登入資訊，觀察 Burp Suite 成功攔截到的 POST 請求。</li>
+                <li>在攔截到的封包上點擊右鍵選取 <strong>`Send to Repeater`</strong>（或按快捷鍵 <code>Ctrl + R</code>）。</li>
                 <li>切換至 <strong>Repeater</strong> 頁籤，修改請求內文參數（例如將電子郵件改為 <code>' OR 1=1 --</code>）後點擊 <strong>Send</strong>，並於右方面板直接觀察伺服器回傳的 <code>200 OK</code> JSON 數據。</li>
             </ol>
         </section>
