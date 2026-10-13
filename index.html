@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web 安全弱點掃描全方位教學 (ZAP & Burp Suite)</title>
+    <title>Web 安全弱點掃描全方位教學 (Codespaces 雲端版)</title>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -45,12 +45,12 @@
         th, td { border: 1px solid var(--border-color); padding: 12px 16px; text-align: left; }
         th { background: #f1f5f9; font-weight: 600; color: var(--text-dark); }
 
-        /* 程式碼與區塊 */
+        /* 程式碼區塊 */
         code { background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; font-family: "Courier New", Courier, monospace; font-size: 0.9em; border: 1px solid #e2e8f0; }
         pre { background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; overflow-x: auto; margin: 15px 0; font-family: monospace; }
         pre code { background: none; color: inherit; padding: 0; border: none; }
 
-        /* 測驗組件樣式 */
+        /* 測驗樣式 */
         .quiz-card { background: var(--bg-gray); border: 1px solid var(--border-color); padding: 22px; border-radius: 8px; margin-bottom: 20px; }
         .option { margin: 10px 0; }
         .option label { cursor: pointer; color: var(--text-dark); }
@@ -75,133 +75,112 @@
 </head>
 <body>
 
-    <!-- 左側側邊欄 -->
+    <!-- 側邊欄導覽 -->
     <nav class="sidebar">
         <h2> Web 安全教學網站</h2>
         <ul>
-            <li><a href="#intro">1. 工具介紹與詳細比較</a></li>
+            <li><a href="#intro">1. 工具介紹與比較</a></li>
             <li><a href="#concepts">2. 核心原理與漏洞解析</a></li>
-            <li><a href="#codespaces">3. GitHub 免安裝虛擬靶場</a></li>
-            <li><a href="#practice">4. 完整步驟與實作演練</a></li>
+            <li><a href="#codespaces-setup">3. Codespaces 純網頁建置</a></li>
+            <li><a href="#practice">4. 雲端實作演練步驟</a></li>
             <li><a href="#quiz">5. 學生綜合觀念測驗</a></li>
             <li><a href="#teacher">6. 教師解答與 Writeup</a></li>
         </ul>
     </nav>
 
-    <!-- 右側主要內容區 -->
+    <!-- 主要內容區 -->
     <main class="main-content">
-        <h1>Web 弱點掃描工具實務教學</h1>
-        <p>歡迎來到本課程！本平臺專為資安初學者與軟體開發人員設計，全面涵蓋 OWASP ZAP 與 Burp Suite 的基礎原理、環境建置、漏洞識別及自動化掃描演練。</p>
+        <h1>Web 弱點掃描工具實務教學 (純網頁 Codespaces 版)</h1>
+        <p>本平臺採用完全免安裝、純瀏覽器執行的 GitHub Codespaces 雲端架構，讓學生與測試人員能直接透過網頁體驗 OWASP ZAP 與 Juice Shop 的滲透測試實務。</p>
 
         <!-- 1. 工具介紹 -->
         <section id="intro">
-            <h2>1. 工具介紹與詳細比較</h2>
-            <p>在網站安全稽核與滲透測試中，<strong>中間人代理 (Man-in-the-Middle Proxy)</strong> 是最核心的工具類別。其中，<strong>OWASP ZAP</strong> 與 <strong>Burp Suite</strong> 佔據了業界最主要的地位。</p>
+            <h2>1. 工具介紹與比較</h2>
+            <p>在資安稽核中，<strong>中間人代理 (Proxy)</strong> 能攔截與動態修改 HTTP/HTTPS 封包。以下為兩種常見代理工具的特性比較：</p>
             
-            <h3>工具定位簡述</h3>
-            <ul>
-                <li><strong>OWASP ZAP (Zed Attack Proxy)</strong>：由 OWASP 維護的開源旗艦專案，強調免費、完全無限制與高度自動化，極適合整合進 DevSecOps 與 CI/CD 流程中。</li>
-                <li><strong>Burp Suite</strong>：由 PortSwigger 公司開發，為商業資安團隊與滲透測試人員的標準工具，提供極強的手動分析、重放與解碼模組。</li>
-            </ul>
-
-            <h3>功能對照矩陣</h3>
             <table>
                 <thead>
                     <tr>
                         <th>比較項目</th>
                         <th>OWASP ZAP</th>
-                        <th>Burp Suite Community (社區版)</th>
-                        <th>Burp Suite Professional (專業版)</th>
+                        <th>Burp Suite Community</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>費用/授權</strong></td>
+                        <td><strong>授權費用</strong></td>
                         <td>完全免費 / 開源</td>
-                        <td>免費版</td>
-                        <td>每年約 $449 USD / 商業訂閱</td>
+                        <td>免費社區版 / 專業版需付費</td>
                     </tr>
                     <tr>
-                        <td><strong>自動化主動掃描</strong></td>
-                        <td>包含完整 Active Scan 模組</td>
-                        <td><span style="color:red;">無主動掃描器</span></td>
-                        <td>內建進階 Burp Scanner</td>
+                        <td><strong>網頁介面支援 (Web UI)</strong></td>
+                        <td><span style="color:green; font-weight:bold;">支援 (Webswing 容器)</span></td>
+                        <td>需安裝桌面環境或獨立軟體</td>
                     </tr>
                     <tr>
-                        <td><strong>Intruder 爆破速度</strong></td>
-                        <td>無速率限制 (無 Throttling)</td>
-                        <td><span style="color:red;">設有人為速率限制 (極慢)</span></td>
-                        <td>無限制，支援多執行緒爆破</td>
+                        <td><strong>主動掃描功能</strong></td>
+                        <td>完整支援（自動爬蟲與漏洞注入）</td>
+                        <td>社區版無主動掃描功能</td>
                     </tr>
                     <tr>
-                        <td><strong>主要推薦場景</strong></td>
-                        <td>DevSecOps、自動化管道、學生學習</td>
-                        <td>基礎手動封包修改與觀察</td>
-                        <td>專業滲透測試、顧問稽核報告</td>
+                        <td><strong>適合教學模式</strong></td>
+                        <td> Codespaces 純網頁實作首選</td>
+                        <td>本地端軟體手動分析首選</td>
                     </tr>
                 </tbody>
             </table>
         </section>
 
-        <!-- 2. 核心原理與漏洞 -->
+        <!-- 2. 核心原理 -->
         <section id="concepts">
             <h2>2. 核心原理與漏洞解析</h2>
+            <h3>中間人代理 (MitM Proxy)</h3>
+            <p>代理伺服器位於用戶端與 Web 伺服器之間。所有發出的 HTTP 請求都會先經過 Proxy 監聽、暫停與修改後再發送至目標網站。</p>
 
-            <h3>代理 (Proxy) 運作機制</h3>
-            <p>代理工具充當瀏覽器（用戶端）與 Web 伺服器之間的中介。當瀏覽器發送 HTTP/HTTPS 請求時，封包會先被 Proxy 捕捉，允許測試人員進行檢查、暫停與篡改，隨後再轉發至目標伺服器。</p>
-
-            <h3>HTTPS 憑證解密 (SSL/TLS Interception)</h3>
-            <p>加密網站使用 TLS 協定傳輸資料。為了使代理工具能看懂 HTTPS 裡面的明文內容，代理工具會在本地動態生成目標網站的「偽造 TLS 憑證」。</p>
-            <div class="alert-box warning">
-                <strong>關鍵步驟：</strong>瀏覽器預設會阻斷不受信任的憑證。因此測試前，必須將工具生成的 <strong>Root CA 憑證</strong>（如 `OWASP ZAP Root CA` 或 `PortSwigger CA`）匯入並設定為「受信任的根憑證頒發機構」。
-            </div>
-
-            <h3>弱點掃描分類</h3>
-            <ul>
-                <li><strong>被動掃描 (Passive Scanning)</strong>：僅觀察並分析經過 Proxy 的 Request/Response，不主動發送額外封包。適用於檢測安全標頭缺失或未帶有 `HttpOnly` / `Secure` 旗標的 Cookie。</li>
-                <li><strong>主動掃描 (Active Scanning)</strong>：針對 URL 參數、Header、Body 參數等注入各種 Payload，透過觀察伺服器回覆以驗證潛在漏洞（如 SQLi、XSS）。</li>
-            </ul>
+            <h3>SQL 注入 (SQL Injection) 漏洞</h3>
+            <p>當應用程式未過濾使用者輸入，直接拼接到資料庫查詢語句時，攻擊者可輸入如 <code>' OR 1=1 --</code> 來破壞原始 SQL 邏輯並繞過登入驗證。</p>
         </section>
 
-        <!-- 3. GitHub 免安裝虛擬靶場 -->
-        <section id="codespaces">
-            <h2>3. GitHub 免安裝虛擬靶場啟動指南</h2>
+        <!-- 3. Codespaces 純網頁建置 -->
+        <section id="codespaces-setup">
+            <h2>3. Codespaces 純網頁實作建置指南</h2>
             <div class="alert-box success">
-                <strong>🚀 零安裝！利用 GitHub Codespaces 執行線上 Linux 虛擬靶場：</strong><br />
-                無須在自己電腦安裝 Docker 或各種環境，直接點擊 GitHub 頁面即可啟動雲端虛擬機！
+                <strong>🚀 全純網頁模式：</strong>完全無須在個人電腦安裝 Docker、Burp Suite 或任何軟體！
             </div>
+            
+            <h3>快速啟動 3 步驟：</h3>
             <ol>
-                <li>回到本 GitHub 專案首頁，點擊右上角的綠色按鈕 <code>&lt;&gt; Code</code>。</li>
-                <li>切換至 <strong>Codespaces</strong> 頁籤，點擊 <code>Create codespace on main</code>。</li>
-                <li>等待網頁載入雲端 VS Code 介面（約 10~20 秒）。</li>
-                <li>在畫面下方的 <strong>Terminal（終端機）</strong> 輸入以下命令並按 Enter：
-                    <pre><code>docker run -d -p 3000:3000 bkimminich/juice-shop</code></pre>
+                <li>在 GitHub 專案頁面點擊 <code>&lt;&gt; Code</code> ➔ 切換至 <code>Codespaces</code> ➔ 點擊 <code>Create codespace on main</code>。</li>
+                <li>等待雲端 VS Code 載入完成後，在下方 <strong>Terminal (終端機)</strong> 複製貼上並執行以下指令：
+                    <pre><code>docker run -d -p 3000:3000 --name juiceshop bkimminich/juice-shop && docker run -d -p 8080:8080 --name zap -i zaproxy/zap-stable zap-webswing.sh</code></pre>
                 </li>
-                <li>終端機執行後，切換至下方面板的 <strong>Ports (連接埠)</strong> 頁籤。</li>
-                <li>點擊 Port <code>3000</code> 旁邊的網址（或右鍵選取 <code>Open in Browser</code>），即可開啟您專屬的線上 Juice Shop 靶場！</li>
+                <li>切換至 VS Code 下方的 <strong>Ports</strong> 頁籤：
+                    <ul>
+                        <li><strong>Port 3000</strong>：點擊右側網址開啟 <strong>Juice Shop 測試靶場</strong>。</li>
+                        <li><strong>Port 8080</strong>：點擊右側網址開啟 <strong>OWASP ZAP 網頁圖形化介面</strong>。</li>
+                    </ul>
+                </li>
             </ol>
         </section>
 
-        <!-- 4. 實際操作演練 -->
+        <!-- 4. 實作演練 -->
         <section id="practice">
-            <h2>4. 完整步驟與實作演練</h2>
+            <h2>4. 雲端實作演練步驟</h2>
 
-            <h3>步驟一：手動封包篡改 (Burp Repeater 演練)</h3>
+            <h3>任務一：自動化弱點掃描 (使用 ZAP Web UI)</h3>
             <ol>
-                <li>開啟 Juice Shop 登入頁面。</li>
-                <li>開啟 Burp Suite 的 <code>Proxy -> Intercept is on</code>。</li>
-                <li>輸入測試帳號點擊登入以攔截 POST 請求。</li>
-                <li>按下 <code>Ctrl + R</code> 將封包送至 <strong>Repeater</strong> 模組。</li>
-                <li>將 JSON 請求中的 `email` 修改為 <code>' OR 1=1 --</code>，點擊 Send。</li>
-                <li>觀察右側 Response，成功獲得 HTTP 200 並返回管理者 JWT Token！</li>
+                <li>開啟 Port 8080 的分頁（ZAP Web UI 畫面）。</li>
+                <li>在主畫面的 <code>URL to attack</code> 欄位中，填入 Port 3000 的 Juice Shop 網址（如 <code>http://localhost:3000</code>）。</li>
+                <li>點擊 <strong>Attack</strong> 按鈕。</li>
+                <li>觀察 ZAP 自動執行爬蟲 (Spider) 與主動弱點掃描 (Active Scan)，並於下方的 <code>Alerts</code> 頁籤檢視發現的漏洞資訊。</li>
             </ol>
 
-            <h3>步驟二：自動化弱點掃描 (OWASP ZAP 演練)</h3>
+            <h3>任務二：SQL 注入驗證繞過</h3>
             <ol>
-                <li>開啟 OWASP ZAP，於主畫面點選 <code>Quick Start -> Automated Scan</code>。</li>
-                <li>填入靶場 URL（例如 Codespaces 生成的 Port 3000 網址）。</li>
-                <li>點擊 <strong>Attack</strong> 開始爬蟲與主動弱點掃描。</li>
-                <li>掃描完成後，切換至 <code>Alerts</code> 頁籤檢視自動檢出的弱點報告。</li>
+                <li>開啟 Juice Shop 靶場網頁（Port 3000），點擊右上角的 <strong>帳號 ➔ 登入</strong>。</li>
+                <li>在電子郵件欄位輸入萬能密碼：<code>' OR 1=1 --</code></li>
+                <li>密碼欄位隨意輸入（如 <code>123456</code>），點擊登入。</li>
+                <li>驗證系統是否成功以最高管理員 (admin@juice-sh.op) 身分登入！</li>
             </ol>
         </section>
 
@@ -210,27 +189,19 @@
             <h2>5. 學生綜合觀念測驗</h2>
             <div id="quiz-container">
                 <div class="quiz-card">
-                    <h3>1. 為什麼在攔截 HTTPS 流量時需要在瀏覽器中安裝 Proxy 工具的 CA 憑證？</h3>
-                    <div class="option"><label><input type="radio" name="q0" value="0"> 提升網路傳輸速度與回應時間</label></div>
-                    <div class="option"><label><input type="radio" name="q0" value="1"> 解密 TLS 加密流量以進行中間人分析 (MitM)</label></div>
-                    <div class="option"><label><input type="radio" name="q0" value="2"> 防止目標伺服器封鎖測試者的 IP 位址</label></div>
+                    <h3>1. 在 Codespaces 環境中，我們如何開啟並使用 OWASP ZAP 介面？</h3>
+                    <div class="option"><label><input type="radio" name="q0" value="0"> 下載安裝檔至本機電腦安裝</label></div>
+                    <div class="option"><label><input type="radio" name="q0" value="1"> 透過 Docker 啟動 Webswing 容器並透過 Port 8080 在瀏覽器開啟</label></div>
+                    <div class="option"><label><input type="radio" name="q0" value="2"> 無法在 Codespaces 中執行 ZAP</label></div>
                     <div id="res-0" class="result"></div>
                 </div>
 
                 <div class="quiz-card">
-                    <h3>2. 下列關於 OWASP ZAP 與 Burp Suite 社區版 (Community) 的比較，何者正確？</h3>
-                    <div class="option"><label><input type="radio" name="q1" value="0"> Burp Suite 社區版包含完全自動化的主動弱點掃描器</label></div>
-                    <div class="option"><label><input type="radio" name="q1" value="1"> OWASP ZAP 為免費開源軟體，且具備完整的主動掃描與無速度限制功能</label></div>
-                    <div class="option"><label><input type="radio" name="q1" value="2"> 兩者皆無法用於手動封包修改與重放</label></div>
+                    <h3>2. 當我們在 Juice Shop 登入欄位輸入 `' OR 1=1 --` 成功登入時，是利用了哪種漏洞？</h3>
+                    <div class="option"><label><input type="radio" name="q1" value="0"> 跨站腳本攻擊 (XSS)</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="1"> SQL 注入攻擊 (SQL Injection)</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="2"> 跨站請求偽造 (CSRF)</label></div>
                     <div id="res-1" class="result"></div>
-                </div>
-
-                <div class="quiz-card">
-                    <h3>3. 「被動掃描 (Passive Scanning)」的主要特點為何？</h3>
-                    <div class="option"><label><input type="radio" name="q2" value="0"> 會發送大量攻擊 Payload 以觸發伺服器異常</label></div>
-                    <div class="option"><label><input type="radio" name="q2" value="1"> 只分析現有流量而不發送額外請求，對目標系統無害</label></div>
-                    <div class="option"><label><input type="radio" name="q2" value="2"> 能自動修復伺服器的安全漏洞</label></div>
-                    <div id="res-2" class="result"></div>
                 </div>
 
                 <button class="btn" onclick="checkQuiz()">提交答案並對獎</button>
@@ -243,7 +214,7 @@
             <div class="teacher-box">
                 <div id="login-form">
                     <h3>🔒 教師權限驗證</h3>
-                    <p>請輸入授權密碼以解鎖測驗解答與靶場 Writeup：</p>
+                    <p>請輸入授權密碼以解鎖解答與解析：</p>
                     <div class="input-group">
                         <input type="password" id="teacher-pwd" placeholder="預設密碼: teacher123">
                         <button class="btn" onclick="unlockTeacher()">驗證解鎖</button>
@@ -254,30 +225,20 @@
                 <div id="teacher-content" style="display: none;">
                     <p style="color: #16a34a; font-weight: bold; margin-bottom: 20px;">✅ 已成功驗證教師身份</p>
                     
-                    <h3>一、 測驗題目解答與詳細解析</h3>
+                    <h3>一、 測驗解答與詳細解析</h3>
                     <div class="answer-card">
-                        <h4>第 1 題解答：選項 (2) 解密 TLS 加密流量...</h4>
-                        <p><strong>解析：</strong>HTTPS 採用端到端加密。Proxy 為了讀取內容會動態簽發偽造憑證，若瀏覽器未信任 Proxy 的 Root CA，連線將被阻斷。</p>
+                        <h4>第 1 題解答：選項 (2) 透過 Docker 啟動 Webswing 容器...</h4>
+                        <p><strong>解析：</strong>OWASP ZAP 官方提供了含有 Webswing 的 Docker 映像檔，讓使用者無需安裝 X11 或桌面軟體，即可直接用瀏覽器開啟圖形介面。</p>
                     </div>
                     <div class="answer-card">
-                        <h4>第 2 題解答：選項 (2) OWASP ZAP 為免費開源軟體...</h4>
-                        <p><strong>解析：</strong>OWASP ZAP 為完全免費的工具；Burp Suite 社區版則移除了一鍵主動弱掃功能。</p>
-                    </div>
-                    <div class="answer-card">
-                        <h4>第 3 題解答：選項 (2) 只分析現有流量而不發送額外請求...</h4>
-                        <p><strong>解析：</strong>被動掃描只監聽經過 Proxy 的 Header 與 Response，不會主動觸發安全警報。</p>
+                        <h4>第 2 題解答：選項 (2) SQL 注入攻擊...</h4>
+                        <p><strong>解析：</strong><code>' OR 1=1 --</code> 利用單引號閉合語法、<code>OR 1=1</code> 恆真邏輯與 <code>--</code> 註解符號，跳過密碼檢查取得權限。</p>
                     </div>
 
-                    <h3>二、 Juice Shop 實作解答 (Writeup)</h3>
-                    <h4>管理員 SQL 注入驗證繞過</h4>
-                    <pre><code>POST /rest/user/login HTTP/1.1
-Content-Type: application/json
-
-{
-  "email": "' OR 1=1 --",
-  "password": "anything"
-}</code></pre>
-                    <p><strong>說明：</strong>傳入 `' OR 1=1 --` 能讓 SQL 條件恆真，註解掉後續比對，直接以 Admin 身分登入。</p>
+                    <h3>二、 Juice Shop SQL 注入原理說明</h3>
+                    <p>伺服器接收到情境後執行的查詢語句如下：</p>
+                    <pre><code>SELECT * FROM Users WHERE email = '' OR 1=1 --' AND password = 'hash';</code></pre>
+                    <p>由於 <code>1=1</code> 恆為 True 且註解符號跳過了後續比對，資料庫直接回傳 User 資料表的第一筆紀錄（即 Admin 帳號）。</p>
                 </div>
             </div>
         </section>
@@ -285,7 +246,7 @@ Content-Type: application/json
 
     <!-- 腳本邏輯 -->
     <script>
-        const answers = [1, 1, 1];
+        const answers = [1, 1];
         function checkQuiz() {
             answers.forEach((ans, idx) => {
                 const selected = document.querySelector(`input[name="q${idx}"]:checked`);
