@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web 安全弱點掃描教學網站 (ZAP & Burp Suite)</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --sidebar-width: 260px;
+            --bg-gray: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #334155; display: flex; min-height: 100vh; }
+        
+        /* 側邊欄導覽 */
+        .sidebar { width: var(--sidebar-width); background: #0f172a; color: #fff; position: fixed; top: 0; bottom: 0; left: 0; padding: 24px 16px; overflow-y: auto; }
+        .sidebar h2 { font-size: 1.1rem; margin-bottom: 20px; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin-bottom: 10px; }
+        .sidebar a { color: #94a3b8; text-decoration: none; display: block; padding: 8px 12px; border-radius: 6px; font-size: 0.95rem; transition: all 0.2s; }
+        .sidebar a:hover { background: #1e293b; color: #fff; }
+
+        /* 主內容區 */
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 40px 60px; max-width: 1000px; }
+        section { margin-bottom: 60px; scroll-margin-top: 40px; }
+        h1 { font-size: 2.2rem; color: #0f172a; margin-bottom: 20px; }
+        h2 { font-size: 1.6rem; color: #1e293b; margin: 30px 0 15px 0; border-bottom: 2px solid var(--primary-color); padding-bottom: 6px; }
+        h3 { font-size: 1.2rem; color: #334155; margin: 20px 0 10px 0; }
+        p { margin-bottom: 12px; }
+        
+        /* 表格樣式 */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 6px; overflow: hidden; }
+        th, td { border: 1px solid var(--border-color); padding: 12px 16px; text-align: left; }
+        th { background: #f1f5f9; font-weight: 600; }
+
+        /* 程式碼與區塊 */
+        code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.9em; }
+        pre { background: #1e293b; color: #f8fafc; padding: 16px; border-radius: 8px; overflow-x: auto; margin: 15px 0; }
+        pre code { background: none; color: inherit; padding: 0; }
+
+        /* 測驗組件樣式 */
+        .quiz-card { background: var(--bg-gray); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 16px; }
+        .option { margin: 10px 0; }
+        .option label { cursor: pointer; }
+        .btn { background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: 600; }
+        .btn:hover { opacity: 0.9; }
+        .result { margin-top: 10px; font-weight: bold; }
+        .correct { color: #16a34a; }
+        .wrong { color: #dc2626; }
+
+        /* 教師專區 */
+        .teacher-box { border: 2px dashed #2563eb; background: #eff6ff; padding: 24px; border-radius: 8px; margin-top: 20px; }
+        .input-group { margin: 15px 0; display: flex; gap: 10px; }
+        .input-group input { padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; width: 250px; }
+        .answer-card { background: #fff; border-left: 4px solid var(--primary-color); padding: 15px; margin-bottom: 15px; border-radius: 0 6px 6px 0; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; }
+            .main-content { margin-left: 0; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 左側側邊欄 -->
+    <nav class="sidebar">
+        <h2> Web 安全教學網站</h2>
+        <ul>
+            <li><a href="#intro">1. 工具介紹與比較</a></li>
+            <li><a href="#concepts">2. 核心原理解析</a></li>
+            <li><a href="#practice">3. 實際操作演練</a></li>
+            <li><a href="#quiz">4. 學生觀念測驗</a></li>
+            <li><a href="#teacher">5. 教師解答專區</a></li>
+        </ul>
+    </nav>
+
+    <!-- 右側主要內容區 -->
+    <main class="main-content">
+        <h1>Web 弱點掃描工具實務教學</h1>
+        <p>歡迎來到本課程！本平臺旨在幫助學習者快速掌握 OWASP ZAP 與 Burp Suite 的運作原理與滲透測試技能。</p>
+
+        <!-- 1. 工具介紹 -->
+        <section id="intro">
+            <h2>1. 工具介紹與比較</h2>
+            <p>在 Web 應用程式安全測試領域，<strong>OWASP ZAP</strong> 與 <strong>Burp Suite</strong> 是目前國際最主流的兩款 HTTP/HTTPS 代理工具。</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>比較項目</th>
+                        <th>OWASP ZAP</th>
+                        <th>Burp Suite (Community / Pro)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>授權與費用</strong></td>
+                        <td>完全免費 / 開源 (OWASP 專案)</td>
+                        <td>社區版免費 / 專業版需付費訂閱</td>
+                    </tr>
+                    <tr>
+                        <td><strong>主動掃描能力</strong></td>
+                        <td>免費版即包含完整主動弱點掃描器</td>
+                        <td>社區版無主動掃描；專業版具備 Burp Scanner</td>
+                    </tr>
+                    <tr>
+                        <td><strong>速度與限制</strong></td>
+                        <td>無人為速率限制</td>
+                        <td>社區版 Intruder 功能設有速率限制 (Throttling)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>最佳應用場景</strong></td>
+                        <td>DevSecOps 自動化、CI/CD 弱掃整合</td>
+                        <td>資安顧問與滲透測試人員手動稽核標準工具</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 2. 核心原理 -->
+        <section id="concepts">
+            <h2>2. 核心原理解析</h2>
+            <h3>中間人代理 (Man-in-the-Middle Proxy)</h3>
+            <p>弱點掃描工具會在瀏覽器與目標伺服器之間架設本地代理（預設為 <code>127.0.0.1:8080</code>），所有的 Request 與 Response 均會透過代理監聽與轉發。</p>
+
+            <h3>HTTPS 憑證解密 (SSL/TLS Interception)</h3>
+            <p>由於 HTTPS 流量經過加密，代理工具會動態簽發目標網站的憑證。測試者必須將工具的 <strong>Root CA 憑證</strong> 匯入瀏覽器的「受信任的根憑證頒發機構」中，才能解析加密封包。</p>
+
+            <h3>被動掃描 vs 主動掃描</h3>
+            <ul>
+                <li><strong>被動掃描 (Passive Scanning)</strong>：僅監聽現有流量，檢測如 Security Headers 缺失、Cookie 未設 HttpOnly/Secure 等，對系統無害。</li>
+                <li><strong>主動掃描 (Active Scanning)</strong>：主動向目標注入攻擊 Payload（如 SQLi, XSS, Command Injection），觀察回應以驗證漏洞。</li>
+            </ul>
+        </section>
+
+        <!-- 3. 實際操作 -->
+        <section id="practice">
+            <h2>3. 實際操作演練 (以 OWASP Juice Shop 為例)</h2>
+            <p>請開啟測試靶場 <code>http://localhost:3000</code> 並設定瀏覽器代理至 <code>127.0.0.1:8080</code>。</p>
+
+            <h3>任務一：手動攔截與參數篡改 (Burp Suite Repeater)</h3>
+            <ol>
+                <li>開啟 Burp Suite 的 <code>Proxy -> Intercept is on</code>。</li>
+                <li>在 Juice Shop 登入頁輸入測試帳密，點擊登入以攔截 POST 請求。</li>
+                <li>按下 <code>Ctrl + R</code> 將請求發送至 Repeater 模組。</li>
+                <li>將 JSON 請求中的 email 修改為 <code>' OR 1=1 --</code> 並點擊 Send。</li>
+                <li>檢視 Response 驗證是否成功繞過密碼檢查取得管理員權限。</li>
+            </ol>
+
+            <h3>任務二：自動化弱點掃描 (OWASP ZAP)</h3>
+            <ol>
+                <li>開啟 ZAP，點擊 <code>Quick Start -> Automated Scan</code>。</li>
+                <li>輸入 URL <code>http://localhost:3000</code> 並點擊 Attack。</li>
+                <li>觀察 Spider（爬蟲）與 Active Scan（主動掃描）進度。</li>
+                <li>掃描完成後，切換至 <code>Alerts</code> 頁籤檢視自動檢出的弱點報告。</li>
+            </ol>
+        </section>
+
+        <!-- 4. 學生測驗 -->
+        <section id="quiz">
+            <h2>4. 學生觀念測驗</h2>
+            <div id="quiz-container">
+                <div class="quiz-card">
+                    <h3>1. 為什麼在攔截 HTTPS 流量時需要在瀏覽器中安裝 Proxy 工具的 CA 憑證？</h3>
+                    <div class="option"><label><input type="radio" name="q0" value="0"> 提升網路傳輸速度</label></div>
+                    <div class="option"><label><input type="radio" name="q0" value="1"> 解密 TLS 加密流量以進行中間人分析 (MitM)</label></div>
+                    <div class="option"><label><input type="radio" name="q0" value="2"> 防止目標伺服器封鎖 IP</label></div>
+                    <div id="res-0" class="result"></div>
+                </div>
+
+                <div class="quiz-card">
+                    <h3>2. 下列關於 OWASP ZAP 與 Burp Suite 社區版的比較，何者正確？</h3>
+                    <div class="option"><label><input type="radio" name="q1" value="0"> Burp Suite 社區版包含完整的主動弱點掃描器</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="1"> OWASP ZAP 為免費開源軟體，且具備完整的主動掃描能力</label></div>
+                    <div class="option"><label><input type="radio" name="q1" value="2"> 兩者皆無法進行手動封包篡改</label></div>
+                    <div id="res-1" class="result"></div>
+                </div>
+
+                <button class="btn" onclick="checkQuiz()">提交答案</button>
+            </div>
+        </section>
+
+        <!-- 5. 教師專區 -->
+        <section id="teacher">
+            <h2>5. 教師解答專區</h2>
+            <div class="teacher-box">
+                <div id="login-form">
+                    <h3>🔒 教師權限驗證</h3>
+                    <p>請輸入授權密碼以解鎖測驗解答與 Writeup：</p>
+                    <div class="input-group">
+                        <input type="password" id="teacher-pwd" placeholder="預設密碼: teacher123">
+                        <button class="btn" onclick="unlockTeacher()">解鎖</button>
+                    </div>
+                    <p id="pwd-error" style="color: red; display: none;">❌ 密碼錯誤！</p>
+                </div>
+
+                <div id="teacher-content" style="display: none;">
+                    <p style="color: green; font-weight: bold; margin-bottom: 15px;">✅ 已成功驗證教師身份</p>
+                    
+                    <h3>測驗題目解答</h3>
+                    <div class="answer-card">
+                        <h4>第 1 題解答：選項 (2)</h4>
+                        <p><strong>解析：</strong>HTTPS 採用 TLS 加密。Proxy 需要動態簽發憑證以解密內容，若未安裝根憑證，瀏覽器會判定為無效連線並阻斷。</p>
+                    </div>
+                    <div class="answer-card">
+                        <h4>第 2 題解答：選項 (2)</h4>
+                        <p><strong>解析：</strong>OWASP ZAP 是完全免費的開源工具；Burp Suite 社區版則移除了一鍵主動弱掃功能。</p>
+                    </div>
+
+                    <h3>Juice Shop 實作解答 (Writeup)</h3>
+                    <p><strong>SQL 注入萬能密碼：</strong> 在登入 API 注入 <code>' OR 1=1 --</code> 能破壞原始 SQL 邏輯並跳過密碼驗證，獲得資料庫中第一個使用者（通常為 Admin）的權限。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 腳本邏輯 -->
+    <script>
+        // 測驗判斷邏輯
+        const answers = [1, 1];
+        function checkQuiz() {
+            answers.forEach((ans, idx) => {
+                const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+                const resDiv = document.getElementById(`res-${idx}`);
+                if (!selected) {
+                    resDiv.className = "result wrong";
+                    resDiv.innerText = "❌ 請選擇答案！";
+                } else if (parseInt(selected.value) === ans) {
+                    resDiv.className = "result correct";
+                    resDiv.innerText = "✅ 正確！";
+                } else {
+                    resDiv.className = "result wrong";
+                    resDiv.innerText = "❌ 錯誤，請再試一次。";
+                }
+            });
+        }
+
+        // 教師密碼驗證邏輯
+        function unlockTeacher() {
+            const pwd = document.getElementById("teacher-pwd").value;
+            if (pwd === "teacher123") {
+                document.getElementById("login-form").style.display = "none";
+                document.getElementById("teacher-content").style.display = "block";
+            } else {
+                document.getElementById("pwd-error").style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>
