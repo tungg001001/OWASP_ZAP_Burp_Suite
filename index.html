@@ -81,7 +81,7 @@
             <li><a href="#intro">1. 工具介紹與比較</a></li>
             <li><a href="#concepts">2. 核心原理與漏洞解析</a></li>
             <li><a href="#codespaces-setup">3. Codespaces 雲端建置</a></li>
-            <li><a href="#practice">4. 5 大實作演練任務</a></li>
+            <li><a href="#practice">4. 6 大實作演練任務</a></li>
             <li><a href="#quiz">5. 學生綜合觀念測驗</a></li>
             <li><a href="#teacher">6. 教師解答與 Writeup</a></li>
         </ul>
@@ -90,7 +90,7 @@
     <!-- 主要內容區 -->
     <main class="main-content">
         <h1>Web 弱點掃描工具實務教學 (純網頁 Codespaces 版)</h1>
-        <p>本平臺採用完全免安裝、純瀏覽器執行的 GitHub Codespaces 雲端架構，讓學生與測試人員能直接透過網頁體驗 OWASP ZAP 與 Juice Shop 的滲透測試實務。</p>
+        <p>本平臺採用完全免安裝、純瀏覽器執行的 GitHub Codespaces 雲端架構，讓學生與測試人員能直接透過網頁體驗 OWASP ZAP、Burp Suite 與 Juice Shop 的滲透測試實務。</p>
 
         <!-- 1. 工具介紹 -->
         <section id="intro">
@@ -113,8 +113,8 @@
                     </tr>
                     <tr>
                         <td><strong>Codespaces 雲端相容性</strong></td>
-                        <td><span style="color:green; font-weight:bold;">極佳 (支援免密碼 Web/API 容器)</span></td>
-                        <td>需安裝獨立桌面或 VNC 介面</td>
+                        <td><span style="color:green; font-weight:bold;">極佳 (支援免密碼 Daemon 模式)</span></td>
+                        <td><span style="color:green; font-weight:bold;">極佳 (支援 KasmVNC 網頁雲端桌面)</span></td>
                     </tr>
                     <tr>
                         <td><strong>自動化掃描能力</strong></td>
@@ -122,9 +122,9 @@
                         <td>社區版無自動化主動掃描功能</td>
                     </tr>
                     <tr>
-                        <td><strong>教學推薦指數</strong></td>
-                        <td> GitHub Codespaces 雲端實作首選</td>
-                        <td>本地端獨立軟體測試首選</td>
+                        <td><strong>手動改包與重發 (Repeater)</strong></td>
+                        <td>支援 API 與簡易攔截</td>
+                        <td>強大且直觀（資安社群產業標準）</td>
                     </tr>
                 </tbody>
             </table>
@@ -144,28 +144,29 @@
         <section id="codespaces-setup">
             <h2>3. Codespaces 雲端實作建置指南</h2>
             <div class="alert-box success">
-                <strong>🚀 免安裝免密碼！使用 GitHub Codespaces 執行雲端靶場：</strong><br />
+                <strong>🚀 免安裝！使用 GitHub Codespaces 執行雲端靶場與網頁版 Burp Suite：</strong><br />
                 完全無須在個人電腦安裝 Docker、Burp Suite 或任何軟體，直接在瀏覽器視窗中啟動完整實作環境！
             </div>
             
             <h3>快速啟動 3 步驟：</h3>
             <ol>
                 <li>在本 GitHub 專案頁面點擊 <code>&lt;&gt; Code</code> ➔ 切換至 <code>Codespaces</code> ➔ 點擊 <code>Create codespace on main</code>。</li>
-                <li>開啟雲端 VS Code 後，在下方 <strong>Terminal (終端機)</strong> 輸入以下 command 一鍵啟動 Juice Shop 與免密碼版 ZAP API：
-                    <pre><code>docker run -d -p 3000:3000 --name juiceshop bkimminich/juice-shop && docker run -d -p 8080:8080 --name zap -e ZAP_AUTH_HEADER_VALUE="" zaproxy/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=".*" -config api.addrs.addr.regex=true -config api.disablekey=true</code></pre>
+                <li>開啟雲端 VS Code 後，在下方 <strong>Terminal (終端機)</strong> 輸入以下 command 一鍵啟動 Juice Shop、ZAP API 與 <strong>KasmVNC 網頁桌面版 Burp Suite</strong>：
+                    <pre><code>docker run -d -p 3000:3000 --name juiceshop bkimminich/juice-shop && docker run -d -p 8080:8080 --name zap -e ZAP_AUTH_HEADER_VALUE="" zaproxy/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.addrs.addr.name=".*" -config api.addrs.addr.regex=true -config api.disablekey=true && docker run -d -p 6080:6080 --name burp -e VNC_PASSWORD=admin kasmweb/burpsuite:1.14.0</code></pre>
                 </li>
                 <li>切換至 VS Code 下方的 <strong>Ports</strong> 頁籤：
                     <ul>
                         <li><strong>Port 3000</strong>：右鍵選取 <code>Open in Browser</code> 開啟 <strong>Juice Shop 靶場網頁</strong>。</li>
                         <li><strong>Port 8080</strong>：右鍵選取 <code>Open in Browser</code> 開啟 <strong>OWASP ZAP 免登入 API 主頁</strong>。</li>
+                        <li><strong>Port 6080</strong>：右鍵選取 <code>Open in Browser</code> 開啟 <strong>Burp Suite 雲端 VNC 桌面</strong> (登入密碼為：<code>admin</code>)。</li>
                     </ul>
                 </li>
             </ol>
         </section>
 
-        <!-- 4. 實作演練 -->
+        <!-- 4. 實作演練 (增至 6 題) -->
         <section id="practice">
-            <h2>4. 5 大實作演練任務</h2>
+            <h2>4. 6 大實作演練任務</h2>
 
             <h3>演練一：SQL 注入（萬能密碼）繞過登入</h3>
             <ol>
@@ -208,6 +209,17 @@
                     <pre><code>docker run --net=host -t zaproxy/zap-stable zap-baseline.py -t http://localhost:3000</code></pre>
                 </li>
                 <li>觀察 Terminal 中 ZAP 爬蟲與檢測進度，並於完成後檢視 PASS (通過)、WARN (警告) 與 FAIL (弱點) 的完整資安評估報告！</li>
+            </ol>
+
+            <h3>演練六：使用 Burp Suite (VNC 雲端桌面) 進行 HTTP 封包攔截與 Repeater 重放</h3>
+            <ol>
+                <li>開啟 <strong>Port 6080</strong> 網頁，連線至雲端 Linux 桌面（若需要密碼輸入 <code>admin</code>）。</li>
+                <li>點擊開啟桌面上的 <strong>Burp Suite Community Edition</strong>。</li>
+                <li>使用 Burp 內建的預設瀏覽器 (Burp Browser) 開啟 Juice Shop 靶場網址 (`http://localhost:3000`)。</li>
+                <li>切換至 Burp 的 <strong>Proxy ➔ Intercept</strong> 頁籤，點擊確認顯示 <code>Intercept is on</code>。</li>
+                <li>在 Juice Shop 網頁上嘗試輸入登入資訊，觀察 Burp Suite 成功攔截到的 POST 請求。</li>
+                <li>在攔截到的封包上點擊右鍵選擇 <strong>`Send to Repeater`</strong>（或按快捷鍵 <code>Ctrl + R</code>）。</li>
+                <li>切換至 <strong>Repeater</strong> 頁籤，修改請求內文參數（例如將電子郵件改為 <code>' OR 1=1 --</code>）後點擊 <strong>Send</strong>，並於右方面板直接觀察伺服器回傳的 <code>200 OK</code> JSON 數據。</li>
             </ol>
         </section>
 
@@ -298,7 +310,7 @@
                         <p><strong>解析：</strong>代理伺服器攔截並轉發雙向的 HTTP 請求與回應，讓測試人員能夠動態監聽或篡改傳輸封包內容。</p>
                     </div>
 
-                    <h3>二、 5 大實作演練 Writeup 與漏洞成因分析</h3>
+                    <h3>二、 6 大實作演練 Writeup 與漏洞成因分析</h3>
                     <div class="answer-card">
                         <h4>演練 1：SQL 注入 (Admin Login)</h4>
                         <p><strong>成因：</strong>登入 API 使用未經過濾的字串拼接 SQL：<code>SELECT * FROM Users WHERE email = 'USER_INPUT' AND password = '...';</code>。當輸入 <code>' OR 1=1 --</code> 時，原語句變為 <code>WHERE email = '' OR 1=1 --' ...</code>，因 <code>1=1</code> 恆真且註解掉後續比對，資料庫回傳第 1 筆紀錄 (Admin)。</p>
@@ -318,6 +330,10 @@
                     <div class="answer-card">
                         <h4>演練 5：ZAP Baseline 引擎運作原理</h4>
                         <p><strong>解析：</strong><code>zap-baseline.py</code> 自動調用 ZAP Spider 爬蟲探索網站內部 URL，並套用被動掃描規則 (Passive Scan Rules) 檢測 HTTP Response Header (如 Lack of Anti-clickjacking Header, X-Content-Type-Options Missing 等)，迅速提供開箱即用的基本資安防禦指引。</p>
+                    </div>
+                    <div class="answer-card">
+                        <h4>演練 6：Burp Suite 封包攔截與 Repeater 手動滲透</h4>
+                        <p><strong>解析：</strong>Burp Suite Proxy 的核心作用在於打破前端網頁的控制與限制（如 HTML5 validation、JavaScript 欄位長度限制）。透過 <strong>Repeater</strong>，測試人員可以獨立於瀏覽器之外，重複修改 HTTP Request 欄位並多次發送，以便探測後端 API 是否存在輸入驗證瑕疵或未處理的異常邏輯。</p>
                     </div>
                 </div>
             </div>
